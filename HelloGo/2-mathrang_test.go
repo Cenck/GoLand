@@ -25,14 +25,17 @@ func TestForRange(t *testing.T) {
 	t.Log("单测结束")
 }
 
+func TestForHello(t *testing.T) {
+	t.Log(9 / 2)
+}
 
 func shuffle(nums []int, n int) []int {
 	// 取mid index
 	var mid_indx = n
-	ret := make([]int,0,10)
+	ret := make([]int, 0, 10)
 	for i := 0; i < mid_indx; i++ {
 		j := i + mid_indx
-		ret = append(ret,nums[i],nums[j] )
+		ret = append(ret, nums[i], nums[j])
 	}
 	return ret
 }
