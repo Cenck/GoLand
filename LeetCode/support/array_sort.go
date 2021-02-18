@@ -1,5 +1,7 @@
 package support
 
+import "fmt"
+
 /*
 十大经典排序算法：
 https://mp.weixin.qq.com/s/Ab5vW2MbqkmwJXMYrfrTpg
@@ -201,12 +203,13 @@ func merge_sort_split(nums []int, start int, end int) {
 		}
 		return
 	}
-	i := l / 2
+	i := l/2 + start
 	merge_sort_split(nums, start, i)
 	merge_sort_split(nums, i+1, end)
 
 	// 合并切片结果
 	merge_sort_merge(nums, start, i, end)
+	fmt.Println(i)
 }
 
 /*
@@ -214,40 +217,33 @@ func merge_sort_split(nums []int, start int, end int) {
 在合并的时候 从start-> i  以及i->end 两边都已经有序了
 */
 func merge_sort_merge(nums []int, start int, i int, end int) {
-	l := end + 1 - start
-	if l <= 2 {
+	length := end + 1 - start
+	if length <= 2 {
 		return
 	}
 	// 两个有序数组的合并，start->i 和i+1->end
-	temarr := make([]int, l)
-	k := 0
-	a := start
-	b := i + 1
-	for ; a <= i; a++ {
-		av := nums[a]
-		for b <= end {
-			bv := nums[b]
-			if av <= bv {
-				temarr[k] = av
-				k++
-				if a <= i {
-					// a没有遍历完的情况下 才打断去a中找更小的值，如果a已经遍历完了 要把二遍历完
-					break
-				} else {
-					b++
-				}
-			} else {
-				temarr[k] = bv
-				b++
-				k++
-			}
+	l, r := start, i+1
+	for l <= end {
+		/*
+			start->i为左数组，i->end为右数组
+			如果遍历到左数组元素比右边小或相等 继续遍历左的下一个元素，如果左数组遍历完毕 而右数组没有遍历完毕 则把右数组搬到左边(这种情况在此处不需要操作)
+			如果右数组没有遍历完毕 且 遍历到左数组元素比右边大，则需要把右边指针的元素迁移插入到l指针对应的位置 同时从r到l区间的元素整体向后搬移一位
+		*/
+		if r > end {
+			// 所有的遍历都是为了从右数组中找到小值 放在前面合适位置
+			break
 		}
-
+		if nums[l] > nums[r] {
+			rv := nums[r]
+			// l-r区间向后搬移，空出l位把rv放进去
+			for i := r; i > l; i-- {
+				nums[i] = nums[i-1]
+			}
+			nums[l] = rv
+			l++
+			r++
+		} else {
+			l++
+		}
 	}
-	k = 0
-	for i := start; i <= end; i++ {
-		nums[i] = temarr[k]
-		k++
-	}
-
 }
