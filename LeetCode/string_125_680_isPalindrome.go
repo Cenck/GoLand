@@ -1,11 +1,14 @@
 package main
 
 import (
-	"./support"
 	"fmt"
 	"strings"
+	"unicode"
 )
 
+/*
+【对碰指针】
+*/
 func main() {
 	s := `0P`
 	palindrome := isPalindrome(s)
@@ -51,29 +54,26 @@ func isComparedChar(c uint8) bool {
 	return (c >= 48 && c <= 57) || (c >= 65 && c <= 90)
 }
 
-// 验证字符串是否为回文符
+// [标准答案]验证字符串是否为回文符
 func isPalindrome(s string) bool {
 	if len(s) < 2 {
 		return true
 	}
 	l, r := 0, len(s)-1
-	var u, v uint8
+	s = strings.ToLower(s)
 	for l < r {
-		u = support.Char2Upper(s[l])
-		v = support.Char2Upper(s[r])
-		if l < r {
-			for !support.IsCharAlphaOrNum(u) && l+1 < len(s) {
-				l++
-				u = support.Char2Upper(s[l])
-			}
-			for !support.IsCharAlphaOrNum(v) && r-1 >= 0 {
-				r--
-				v = support.Char2Upper(s[r])
-			}
+		u := s[l]
+		v := s[r]
+		if !unicode.IsLetter(rune(u)) && !unicode.IsDigit(rune(u)) {
+			// 即不是字母 也不是数字
+			l++
+			continue
 		}
-		if l >= r {
-			break
-		} else if u != v {
+		if !unicode.IsLetter(rune(v)) && !unicode.IsDigit(rune(v)) {
+			r--
+			continue
+		}
+		if u != v {
 			return false
 		} else {
 			l++

@@ -39,6 +39,16 @@ func main() {
 	// 类的继承
 	bm := EmotionMovie{m, true}
 	fmt.Println("情感电影：", bm.Name)
+
+	// switch 枚举
+	var a = 5
+	switch a {
+	case DEV:
+		fmt.Println("这是开发环境")
+		break
+	case STABLE:
+		break
+	}
 }
 
 // 情感电影是电影的一种 继承了Movie
@@ -86,3 +96,11 @@ func isMovieOk(m MovieComment) bool {
 	score := m.Score()
 	return score >= 7
 }
+
+// 枚举
+const (
+	DEV = iota
+	STABLE
+	PREPUB
+	PRO
+)
